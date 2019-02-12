@@ -114,5 +114,5 @@ then you need to link the tabspage with each underlying page you want to use the
 ## Limitations
 This module is very invasive to the overall page design in order to achieve this hw-accelerated behavior, and as mentioned it is still experimental. Things like ion-refresher will be displaced when using it on supertabs and maybe other problems could arise as well. The code will be reviewed and cleaned up over the course of this project and please feel free to contribute.
 
-**Thats it, hope you can use it!**
+**Thats it, hope enjoy!**
 
