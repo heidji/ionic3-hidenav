@@ -119,4 +119,4 @@ This module is very invasive to the overall page design in order to achieve this
 **Thats it, enjoy!**
 
 [npm-url]: https://npmjs.org/package/ionic3-hidenav
-[npm-image]: https://img.shields.io/badge/npm-0.0.6-green.svg
+[npm-image]: https://img.shields.io/badge/npm-0.0.7-green.svg
