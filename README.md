@@ -4,6 +4,8 @@
 
 Experimental Plugin for hardware accelerated navigation bar transitions while scrolling. There are two modes available, one with supertabs and one for normal pages.
 
+![](https://github.com/heidji/readme-content/blob/master/ezgif-1-158630fd5e77.gif?raw=true)
+
 ## How to install
 
 ```
@@ -14,7 +16,7 @@ npm i ionic3-hidenav
 
 Update your **app.module.ts** as follows:
 
-```
+```typescript
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
@@ -55,7 +57,7 @@ In order to use the component in your project you need to specify the components
 There are two main actors which we need to choose: **ion-content** and **ion-header**, if you are planning to use the component on a supertabs page you will need to specify these components on different pages. more on that under **using with zyra/ionic2-super-tabs** below.
 
 ### home.html
-```
+```html
 <ion-header hidenav-header="homepage1">
   <ion-navbar>
     <ion-title>
@@ -73,8 +75,6 @@ There are two main actors which we need to choose: **ion-content** and **ion-hea
 #### establishing links with your different components
 it is important to remember that these components will try to react together globally within the app, there is no way for the module to know on which page it is physically located so you need to give unique names to these components in order to avoid unexpected results. In this case we gave the **hidenav-header** and **hidenav-component** the same name so they know they belong to each other globally.
 
-![](https://github.com/heidji/readme-content/blob/master/ezgif-1-158630fd5e77.gif?raw=true)
-
 ## using with zyra/ionic2-super-tabs
 If you don't already know what supertabs are, it's an amazing project by Ibby Hadeed made to enable users to add swipeable tabs in their Ionic projects, check out the [repo](https://github.com/zyra/ionic2-super-tabs/).
 
@@ -84,7 +84,7 @@ it gets tricky to manage hiding navigation with tabs on, the reason behind it is
 First you need to specify the **ion-content** and **ion-header** on the tabs page, these two should carry the same name:
 
 ### tabs.html
-```
+```html
 <ion-header hidenav-header="tabspage1">
 
   <ion-navbar>
@@ -92,7 +92,6 @@ First you need to specify the **ion-content** and **ion-header** on the tabs pag
   </ion-navbar>
 
 </ion-header>
-
 
 <ion-content hidenav-tabscontent="tabspage1">
   <super-tabs>
