@@ -1,5 +1,7 @@
 # Hide Navigation Bar for Ionic 3
 
+[![NPM version][npm-image]][npm-url]
+
 Experimental Plugin for hardware accelerated navigation bar transitions while scrolling. There are two modes available, one with supertabs and one for normal pages.
 
 ## How to install
@@ -116,3 +118,5 @@ This module is very invasive to the overall page design in order to achieve this
 
 **Thats it, enjoy!**
 
+[npm-url]: https://npmjs.org/package/ionic3-hidenav
+[npm-image]: https://img.shields.io/badge/npm-0.0.6-green.svg
