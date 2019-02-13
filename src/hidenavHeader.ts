@@ -13,8 +13,13 @@ export class HidenavHeader {
     }
 
     ngAfterViewInit() {
-        if(typeof this.globals.data[this.name] == 'undefined')
+        if(typeof this.globals.data[this.name] == 'undefined' || this.globals.data[this.name] == null)
             this.globals.data[this.name] = [];
         this.globals.data[this.name].header = this.el;
+        this.globals.initiate(this.name);
+    }
+
+    ngOnDestroy() {
+        this.globals.data[this.name] = null;
     }
 }

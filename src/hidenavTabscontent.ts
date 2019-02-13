@@ -15,7 +15,7 @@ export class HidenavTabscontent {
     }
 
     ngAfterViewInit() {
-        if(typeof this.globals.data[this.name] == 'undefined')
+        if(typeof this.globals.data[this.name] == 'undefined' || this.globals.data[this.name] == null)
             this.globals.data[this.name] = [];
         this.globals.data[this.name].tabscontent = this.el;
 
@@ -28,7 +28,11 @@ export class HidenavTabscontent {
         }
     }
 
+    ngOnDestroy() {
+        this.globals.data[this.name] = null;
+    }
+
     ngAfterViewChecked() {
-        this.el._scrollContent.nativeElement.querySelector('super-tabs-container').style.height = '100%';
+        this.globals.checkHeight(this.name);
     }
 }

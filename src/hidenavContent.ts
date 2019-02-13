@@ -14,10 +14,14 @@ export class HidenavContent {
     }
 
     ngAfterViewInit() {
-        if(typeof this.globals.data[this.name] == 'undefined')
+        if(typeof this.globals.data[this.name] == 'undefined' || this.globals.data[this.name] == null)
             this.globals.data[this.name] = [];
         this.globals.data[this.name].content = this.el;
         this.globals.data[this.name].parent = this.parent;
         this.globals.initiate(this.name);
+    }
+
+    ngOnDestroy() {
+        this.globals.data[this.name] = null;
     }
 }
