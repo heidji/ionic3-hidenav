@@ -32,7 +32,7 @@ export class HidenavService {
                             this.data[name].marginTop = parseInt(window.getComputedStyle(content._scroll._el)['margin-top'], 10);
                         if (this.data[name].paddingTop == null)
                             this.data[name].paddingTop = parseInt(window.getComputedStyle(content._scroll._el)['padding-top'], 10);
-                        if(this.data[name].navheight == null)
+                        if (this.data[name].navheight == null)
                             this.data[name].navheight = this.data[name].marginTop + this.data[name].paddingTop;
                         (<any>content._scroll._el).style.paddingTop = this.data[name].navheight + 'px';
                         (<any>content._scroll._el).style.marginTop = 0;
@@ -154,31 +154,39 @@ export class HidenavService {
             .subscribe(i => {
                 x -= 1;
                 if (!content.isScrolling) {
-                    x = 0;
+                    let scrollTopTemp = this.data[name].scrollTop;
                     if (this.data[name].direction == 'down') {
                         Observable.interval(6)
-                            .takeWhile(() => (this.data[name].scrollTop < this.data[name].navheight))
-                            .subscribe(i => {
-                                if (this.data[name].scrollTop > this.data[name].navheight) this.data[name].scrollTop = this.data[name].navheight;
-                                h.nativeElement.style.transform = "translate3d(0, " + -this.data[name].scrollTop + "px, 0)";
-                            });
-                        if (this.data[name].scrollTop < this.data[name].navheight) {
-                            content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, ((this.data[name].navheight - this.data[name].scrollTop) / 2) * 6).then(() => {
+                            .takeWhile(() => (scrollTopTemp < this.data[name].navheight))
+                            ._finally(() => {
+                                scrollTopTemp = this.data[name].navheight;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                                 this.data[name].scrollTop = this.data[name].navheight;
+                            })
+                            .subscribe(i => {
+                                scrollTopTemp += 2;
+                                if (scrollTopTemp > this.data[name].navheight) scrollTopTemp = this.data[name].navheight;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                             });
-                        }
+                        content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, ((this.data[name].navheight - this.data[name].scrollTop) / 2) * 6).then(() => {
+                            this.data[name].scrollTop = this.data[name].navheight;
+                        });
                     } else if (this.data[name].direction == 'up') {
                         Observable.interval(6)
-                            .takeWhile(() => (this.data[name].scrollTop > 0))
-                            .subscribe(i => {
-                                if (this.data[name].scrollTop < 0) this.data[name].scrollTop = 0;
-                                h.nativeElement.style.transform = "translate3d(0, " + -this.data[name].scrollTop + "px, 0)";
-                            });
-                        if (this.data[name].scrollTop < this.data[name].navheight) {
-                            content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, (this.data[name].scrollTop / 2) * 6).then(() => {
+                            .takeWhile(() => (scrollTopTemp > 0))
+                            ._finally(() => {
+                                scrollTopTemp = 0;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                                 this.data[name].scrollTop = 0;
+                            })
+                            .subscribe(i => {
+                                scrollTopTemp -= 2;
+                                if (scrollTopTemp < 0) scrollTopTemp = 0;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                             });
-                        }
+                        content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, (this.data[name].scrollTop / 2) * 6).then(() => {
+                            this.data[name].scrollTop = 0;
+                        });
                     }
                     sub.unsubscribe();
                 }
@@ -199,34 +207,44 @@ export class HidenavService {
             .subscribe(i => {
                 x -= 1;
                 if (!content.isScrolling) {
+                    let scrollTopTemp = this.data[name].scrollTop;
                     if (this.data[name].direction == 'down') {
                         Observable.interval(6)
-                            .takeWhile(() => (this.data[name].scrollTop < this.data[name].navheight))
-                            .subscribe(i => {
-                                this.data[name].scrollTop += 2;
-                                if (this.data[name].scrollTop > this.data[name].navheight) this.data[name].scrollTop = this.data[name].navheight;
-                                h.nativeElement.style.transform = "translate3d(0, " + -this.data[name].scrollTop + "px, 0)";
-                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -this.data[name].scrollTop + "px, 0)";
-                            });
-                        if (this.data[name].scrollTop < this.data[name].navheight) {
-                            content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, ((this.data[name].navheight - this.data[name].scrollTop) / 2) * 6).then(() => {
+                            .takeWhile(() => (scrollTopTemp < this.data[name].navheight))
+                            ._finally(() => {
+                                scrollTopTemp = this.data[name].navheight;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
+                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                                 this.data[name].scrollTop = this.data[name].navheight;
+                            })
+                            .subscribe(i => {
+                                scrollTopTemp += 2;
+                                if (scrollTopTemp > this.data[name].navheight) scrollTopTemp = this.data[name].navheight;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
+                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                             });
-                        }
+                        content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, ((this.data[name].navheight - this.data[name].scrollTop) / 2) * 6).then(() => {
+                            this.data[name].scrollTop = this.data[name].navheight;
+                        });
+
                     } else if (this.data[name].direction == 'up') {
                         Observable.interval(6)
                             .takeWhile(() => (this.data[name].scrollTop > 0))
-                            .subscribe(i => {
-                                this.data[name].scrollTop -= 2;
-                                if (this.data[name].scrollTop < 0) this.data[name].scrollTop = 0;
-                                h.nativeElement.style.transform = "translate3d(0, " + -this.data[name].scrollTop + "px, 0)";
-                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -this.data[name].scrollTop + "px, 0)";
-                            });
-                        if (this.data[name].scrollTop < this.data[name].navheight) {
-                            content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, (this.data[name].scrollTop / 2) * 6).then(() => {
+                            ._finally(() => {
+                                scrollTopTemp = 0;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
+                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                                 this.data[name].scrollTop = 0;
+                            })
+                            .subscribe(i => {
+                                scrollTopTemp -= 2;
+                                if (scrollTopTemp < 0) scrollTopTemp = 0;
+                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
+                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
                             });
-                        }
+                        content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, (this.data[name].scrollTop / 2) * 6).then(() => {
+                            this.data[name].scrollTop = 0;
+                        });
                     }
                     sub.unsubscribe();
                 }

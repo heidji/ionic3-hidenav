@@ -105,7 +105,7 @@ then you need to link the tabspage with each underlying page you want to use the
 
 ### page1.html
 
-```
+```html
 <ion-content hidenav-content="page1" hidenav-parent="tabspage1" padding>
   <!-- enough content to scroll -->
 </ion-content>
