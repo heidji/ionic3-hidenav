@@ -1,6 +1,6 @@
 {
   "name": "ionic3-hidenav",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A simple navbar auto-hide module for ionic 3",
   "main": "./index.js",
   "typings": "./index.d.ts",

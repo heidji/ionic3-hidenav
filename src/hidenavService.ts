@@ -98,7 +98,12 @@ export class HidenavService {
                     if (this.data[parent].containerHeight == null)
                         this.data[parent].containerHeight = tabscontent._scrollContent.nativeElement.querySelector('super-tabs-container').style.height;
                     tabscontent._scrollContent.nativeElement.querySelector('super-tabs-container').style.height = '100%';
-                    tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.position = 'absolute';
+                    //sometimes the content jumps once the scroll is initiated yielding a bad animation
+                    if(tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.position != 'absolute'){
+                        let x = content.scrollTop;
+                        tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.position = 'absolute';
+                        content.scrollTop = x;
+                    }
 
                 } else {
                     //reset the scroll
@@ -269,7 +274,7 @@ export class HidenavService {
             tabscontent._scrollContent.nativeElement.querySelector('super-tabs-container').style.height = this.data[parent].containerHeight;
             tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.position = 'static';
 
-            //Undo ANiMATE!
+            //Undo ANIMATE!
             (<any>header._elementRef).nativeElement.style.transform = null;
             tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = null;
         } else {
