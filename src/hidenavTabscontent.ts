@@ -24,7 +24,7 @@ export class HidenavTabscontent {
         if(this.supertabs){
             this.supertabs.tabSelect.subscribe(e => {
                 if(e.changed == true){
-                    this.globals.reset(this.name);
+                    this.globals.resetTabs(this.name);
                 }
             })
         }

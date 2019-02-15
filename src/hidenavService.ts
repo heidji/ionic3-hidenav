@@ -83,13 +83,17 @@ export class HidenavService {
                         //assign the previous content margin top to a variable
                         if (this.data[parent].marginTop == null)
                             this.data[parent].marginTop = (<any>tabscontent._scroll._el).style.marginTop;
+                        if (this.data[name].marginTop == null)
+                            this.data[name].marginTop = parseInt(window.getComputedStyle(content._scroll._el)['margin-top'], 10);
+                        if (this.data[name].paddingTop == null)
+                            this.data[name].paddingTop = parseInt(window.getComputedStyle(content._scroll._el)['padding-top'], 10);
                         //then exchange margin top with padding top
                         (<any>tabscontent._scroll._el).style.paddingTop = toolbarOffsetHeight + 'px';
                         (<any>tabscontent._scroll._el).style.marginTop = 0;
                     }
 
                     //shift the content page below the supertabs toolbar
-                    content._scrollContent.nativeElement.style.paddingTop = toolbarOffsetHeight + 'px';
+                    content._scrollContent.nativeElement.style.paddingTop = toolbarOffsetHeight + this.data[name].marginTop + this.data[name].paddingTop + 'px';
 
                     this.data[name].navheight = header._elementRef.nativeElement.offsetHeight;
                     tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.top = this.data[name].navheight + 'px';
@@ -257,6 +261,7 @@ export class HidenavService {
     }
 
     public reset(name) {
+        console.log(name)
         let parent = this.data[name].parent;
         let content = this.data[name].content;
         if (parent) {
@@ -267,7 +272,8 @@ export class HidenavService {
                 (<any>tabscontent._scroll._el).style.marginTop = this.data[parent].marginTop;
                 (<any>tabscontent._scroll._el).style.paddingTop = 0;
             }
-            content._scrollContent.nativeElement.style.paddingTop = '0px';
+            content._scrollContent.nativeElement.style.paddingTop = this.data[name].paddingTop + 'px';
+            content._scrollContent.nativeElement.style.marginTop = this.data[name].marginTop + 'px';
 
             //revert supertabs behavior
             tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.top = '0px';
@@ -282,6 +288,32 @@ export class HidenavService {
             (<any>content._scroll._el).style.paddingTop = this.data[name].paddingTop + 'px';
             (<any>content._scroll._el).style.marginTop = this.data[name].marginTop + 'px';
             (<any>header._elementRef).nativeElement.style.transform = null;
+        }
+    }
+
+    resetTabs(name) {
+        let tabscontent = this.data[name].tabscontent;
+        let header = this.data[name].header;
+        if (typeof tabscontent._scroll._el != 'undefined') {
+            //exchange tabscontent margin top with padding top
+            (<any>tabscontent._scroll._el).style.marginTop = this.data[name].marginTop;
+            (<any>tabscontent._scroll._el).style.paddingTop = 0;
+        }
+
+        //revert supertabs behavior
+        tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.top = '0px';
+        tabscontent._scrollContent.nativeElement.querySelector('super-tabs-container').style.height = this.data[name].containerHeight;
+        tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.position = 'static';
+
+        //Undo ANIMATE!
+        (<any>header._elementRef).nativeElement.style.transform = null;
+        tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = null;
+
+        for (let key in this.data){
+            if(this.data[key].parent == name){
+                this.data[key].scrollTop = 0;
+                this.data[key].lastScroll = 0;
+            }
         }
     }
 
