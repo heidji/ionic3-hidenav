@@ -5,11 +5,6 @@ import {Observable} from "rxjs";
 export class HidenavService {
 
     data: any = [];
-
-    scrollTop = 0;
-    navheight = 0;
-    direction: any;
-    lastscroll = 0;
     tapping = false;
 
     initiate(name) {
@@ -33,8 +28,8 @@ export class HidenavService {
                         if (this.data[name].paddingTop == null)
                             this.data[name].paddingTop = parseInt(window.getComputedStyle(content._scroll._el)['padding-top'], 10);
                         if (this.data[name].navheight == null)
-                            this.data[name].navheight = this.data[name].marginTop + this.data[name].paddingTop;
-                        (<any>content._scroll._el).style.paddingTop = this.data[name].navheight + 'px';
+                            this.data[name].navheight = header._elementRef.nativeElement.offsetHeight;
+                        (<any>content._scroll._el).style.paddingTop = this.data[name].paddingTop + this.data[name].marginTop + 'px';
                         (<any>content._scroll._el).style.marginTop = 0;
                     }
                 } else {
@@ -134,11 +129,11 @@ export class HidenavService {
                 tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -this.data[name].scrollTop + "px, 0)";
             });
             //complete the scroll if user lets go of the screen prematurely
-            content._elementRef.nativeElement.addEventListener('touchend', this.ct.bind(this, name, parent));
+            content._elementRef.nativeElement.addEventListener('touchend', this.ct.bind(this, name));
 
             content.ionScrollEnd.subscribe(() => {
                 if (!this.tapping) {
-                    this.ct(name, parent);
+                    this.ct(name);
                 }
                 //check if the event missed out one last tick (for reset, white banner syndrome)
                 setTimeout(() => {
@@ -163,37 +158,12 @@ export class HidenavService {
             .subscribe(i => {
                 x -= 1;
                 if (!content.isScrolling) {
-                    let scrollTopTemp = this.data[name].scrollTop;
                     if (this.data[name].direction == 'down') {
-                        Observable.interval(6)
-                            .takeWhile(() => (scrollTopTemp < this.data[name].navheight))
-                            ._finally(() => {
-                                scrollTopTemp = this.data[name].navheight;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                this.data[name].scrollTop = this.data[name].navheight;
-                            })
-                            .subscribe(i => {
-                                scrollTopTemp += 2;
-                                if (scrollTopTemp > this.data[name].navheight) scrollTopTemp = this.data[name].navheight;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                            });
-                        content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, ((this.data[name].navheight - this.data[name].scrollTop) / 2) * 6).then(() => {
+                        content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, (this.data[name].navheight - this.data[name].scrollTop) * 6).then(() => {
                             this.data[name].scrollTop = this.data[name].navheight;
                         });
                     } else if (this.data[name].direction == 'up') {
-                        Observable.interval(6)
-                            .takeWhile(() => (scrollTopTemp > 0))
-                            ._finally(() => {
-                                scrollTopTemp = 0;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                this.data[name].scrollTop = 0;
-                            })
-                            .subscribe(i => {
-                                scrollTopTemp -= 2;
-                                if (scrollTopTemp < 0) scrollTopTemp = 0;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                            });
-                        content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, (this.data[name].scrollTop / 2) * 6).then(() => {
+                        content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, this.data[name].scrollTop * 6).then(() => {
                             this.data[name].scrollTop = 0;
                         });
                     }
@@ -202,56 +172,23 @@ export class HidenavService {
             });
     }
 
-    private ct(name, parent) {
+    private ct(name) {
         this.tapping = false;
         if (this.data[name].scrollTop == 0 || this.data[name].scrollTop == this.data[name].navheight)
             return false;
-        let header = this.data[parent].header;
         let content = this.data[name].content;
-        let tabscontent = this.data[parent].tabscontent;
-        let h: any = header._elementRef;
         let x = 40;
         let sub = Observable.interval(5)
             .takeWhile(() => (x > 0))
             .subscribe(i => {
                 x -= 1;
                 if (!content.isScrolling) {
-                    let scrollTopTemp = this.data[name].scrollTop;
                     if (this.data[name].direction == 'down') {
-                        Observable.interval(6)
-                            .takeWhile(() => (scrollTopTemp < this.data[name].navheight))
-                            ._finally(() => {
-                                scrollTopTemp = this.data[name].navheight;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                this.data[name].scrollTop = this.data[name].navheight;
-                            })
-                            .subscribe(i => {
-                                scrollTopTemp += 2;
-                                if (scrollTopTemp > this.data[name].navheight) scrollTopTemp = this.data[name].navheight;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                            });
-                        content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, ((this.data[name].navheight - this.data[name].scrollTop) / 2) * 6).then(() => {
+                        content.scrollTo(0, content.scrollTop + this.data[name].navheight - this.data[name].scrollTop, (this.data[name].navheight - this.data[name].scrollTop) * 6).then(() => {
                             this.data[name].scrollTop = this.data[name].navheight;
                         });
-
                     } else if (this.data[name].direction == 'up') {
-                        Observable.interval(6)
-                            .takeWhile(() => (this.data[name].scrollTop > 0))
-                            ._finally(() => {
-                                scrollTopTemp = 0;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                this.data[name].scrollTop = 0;
-                            })
-                            .subscribe(i => {
-                                scrollTopTemp -= 2;
-                                if (scrollTopTemp < 0) scrollTopTemp = 0;
-                                h.nativeElement.style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                                tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.transform = "translate3d(0, " + -scrollTopTemp + "px, 0)";
-                            });
-                        content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, (this.data[name].scrollTop / 2) * 6).then(() => {
+                        content.scrollTo(0, content.scrollTop - this.data[name].scrollTop, this.data[name].scrollTop  * 6).then(() => {
                             this.data[name].scrollTop = 0;
                         });
                     }
@@ -261,7 +198,6 @@ export class HidenavService {
     }
 
     public reset(name) {
-        console.log(name)
         let parent = this.data[name].parent;
         let content = this.data[name].content;
         if (parent) {

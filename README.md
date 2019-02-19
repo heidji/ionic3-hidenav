@@ -2,7 +2,7 @@
 
 [![NPM version][npm-image]][npm-url]
 
-Experimental Plugin for hardware accelerated navigation bar transitions while scrolling. There are two modes available, one with supertabs and one for normal pages.
+HideNavbar is an angular directive for hardware accelerated navigation bar transitions while scrolling. There are two modes available, one with supertabs and one for normal pages.
 
 ![](https://github.com/heidji/readme-content/blob/master/ezgif-1-158630fd5e77.gif?raw=true)
 
@@ -112,10 +112,7 @@ then you need to link the tabspage with each underlying page you want to use the
 
 ```
 
-## Limitations
-This module is very invasive to the overall page design in order to achieve this hw-accelerated behavior, and as mentioned it is still experimental. The code will be reviewed and cleaned up over the course of this project and please feel free to contribute.
-
 **Thats it, enjoy!**
 
 [npm-url]: https://npmjs.org/package/ionic3-hidenav
-[npm-image]: https://img.shields.io/badge/npm-0.0.10-green.svg
+[npm-image]: https://img.shields.io/badge/npm-1.0.0-green.svg
