@@ -4,6 +4,9 @@
 
 HideNavbar is an angular directive for hardware accelerated navigation bar transitions while scrolling. There are two modes available, one with supertabs and one for normal pages.
 
+#### Also: Check out the new [Hidenav module for Ionic4](https://github.com/heidji/ionic4-hidenav)!
+
+
 ![](https://github.com/heidji/readme-content/blob/master/ezgif-1-158630fd5e77.gif?raw=true)
 
 ## How to install
@@ -34,7 +37,7 @@ import {HidenavModule} from "ionic3-hidenav";
     imports: [
         BrowserModule,
         IonicModule.forRoot(MyApp),
-        HidenavModule.forRoot()
+        HidenavModule.forRoot() //<-- add this to your app module
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -51,14 +54,36 @@ export class AppModule {
 }
 
 ```
-if you're using **lazy loading** make sure to also import **HidenavModule** either globally using a shared.module.ts or in the each page module you're planning to use it on.
+if you're using **lazy loading** make sure to also import **HidenavModule** either globally using a shared.module.ts or in the each page module you're planning to use it on:
+
+**newsstack.module.ts**
+```typescript
+import {NgModule} from '@angular/core';
+import {IonicPageModule} from 'ionic-angular';
+import {NewsstackPage} from './newsstack';
+import {HidenavModule} from "../../widgets/hidenav/hidenav.module";
+
+@NgModule({
+    declarations: [
+        NewsstackPage,
+    ],
+    imports: [
+        IonicPageModule.forChild(NewsstackPage),
+        HidenavModule //<-- add this to your page module
+    ],
+})
+export class NewsstackPageModule {
+}
+
+```
+
 ## Usage
 In order to use the component in your project you need to specify the components which need to interact with each other to achieve the desired behavior.
-There are two main actors which we need to choose: **ion-content** and **ion-header**, if you are planning to use the component on a supertabs page you will need to specify these components on different pages. more on that under **using with zyra/ionic2-super-tabs** below.
+There are two main actors which we need to choose: **ion-content** and **ion-header** and give them the directives `hidenav-content` and `hidenav-header` respectively. If you are planning to use the component on a supertabs page you will need to specify these components on different pages. more on that under **using with zyra/ionic2-super-tabs** below.
 
 ### home.html
 ```html
-<ion-header hidenav-header="homepage1">
+<ion-header hidenav-header>
   <ion-navbar>
     <ion-title>
       Ionic Blank
@@ -66,14 +91,12 @@ There are two main actors which we need to choose: **ion-content** and **ion-hea
   </ion-navbar>
 </ion-header>
 
-<ion-content hidenav-content="homepage1" padding>
+<ion-content hidenav-content>
   <!-- long enough content to scroll -->
   .....
 </ion-content>
 
 ```
-#### establishing links with your different components
-it is important to remember that these components will try to react together globally within the app, there is no way for the module to know on which page it is physically located so you need to give unique names to these components in order to avoid unexpected results. In this case we gave the **hidenav-header** and **hidenav-component** the same name so they know they belong to each other globally.
 
 ## using with zyra/ionic2-super-tabs
 If you don't already know what supertabs are, it's an amazing project by Ibby Hadeed made to enable users to add swipeable tabs in their Ionic projects, check out the [repo](https://github.com/zyra/ionic2-super-tabs/).
@@ -81,11 +104,11 @@ If you don't already know what supertabs are, it's an amazing project by Ibby Ha
 ![](https://github.com/heidji/readme-content/blob/master/ezgif-1-438aab70caaf.gif?raw=true)
 
 it gets tricky to manage hiding navigation with tabs on, the reason behind it is that links will stretch out on several pages.
-First you need to specify the **ion-content** and **ion-header** on the tabs page, these two should carry the same name:
+First you need to specify the **ion-content** and **ion-header** on the tabs page with the directives `hidenav-tabscontent` and `hidenav-header`:
 
 ### tabs.html
 ```html
-<ion-header hidenav-header="tabspage1">
+<ion-header hidenav-header>
 
   <ion-navbar>
     <ion-title>tabs</ion-title>
@@ -93,7 +116,7 @@ First you need to specify the **ion-content** and **ion-header** on the tabs pag
 
 </ion-header>
 
-<ion-content hidenav-tabscontent="tabspage1">
+<ion-content hidenav-tabscontent>
   <super-tabs>
     <super-tab [root]="page1" title="First page"></super-tab>
     <super-tab [root]="page2" title="Second page"></super-tab>
@@ -101,12 +124,12 @@ First you need to specify the **ion-content** and **ion-header** on the tabs pag
   </super-tabs>
 </ion-content>
 ```
-then you need to link the tabspage with each underlying page you want to use the hidenav function with using the **hidenav-parent** tag:
+then you need to link the tabspage with each underlying page you want to use the hidenav function with using the `hidenav-content` and `hidenav-tabspage` directives together.
 
 ### page1.html
 
 ```html
-<ion-content hidenav-content="page1" hidenav-parent="tabspage1" padding>
+<ion-content hidenav-content hidenav-tabspage>
   <!-- enough content to scroll -->
 </ion-content>
 
@@ -115,4 +138,4 @@ then you need to link the tabspage with each underlying page you want to use the
 **Thats it, enjoy!**
 
 [npm-url]: https://npmjs.org/package/ionic3-hidenav
-[npm-image]: https://img.shields.io/badge/npm-1.0.0-green.svg
+[npm-image]: https://img.shields.io/badge/npm-2.0.0-green.svg

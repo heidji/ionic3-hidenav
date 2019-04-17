@@ -6,6 +6,22 @@ export class HidenavService {
 
     data: any = [];
     tapping = false;
+    names = [];
+    tabnames = [];
+
+    requestName(){
+        let name = 'page'+this.names.length;
+        this.names.push(name);
+        return name;
+    }
+
+    requestTabName(name){
+        if(!this.tabnames[name])
+            this.tabnames[name] = [];
+        let tabname = name+'tab'+this.tabnames[name].length;
+        this.tabnames[name].push(tabname);
+        return tabname;
+    }
 
     initiate(name) {
         if (!(this.data[name] && (this.data[name].parent && this.data[this.data[name].parent].tabscontent && this.data[name].content && this.data[this.data[name].parent].header) || (!this.data[name].parent && this.data[name].content && this.data[name].header)))
@@ -73,6 +89,7 @@ export class HidenavService {
                 let header = this.data[parent].header;
                 let tabscontent = this.data[parent].tabscontent;
                 if (content.scrollTop > 0) {
+                    let x = content.scrollTop;
                     let toolbarOffsetHeight = tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').offsetHeight;
                     if (typeof tabscontent._scroll._el != 'undefined') {
                         //assign the previous content margin top to a variable
@@ -99,7 +116,6 @@ export class HidenavService {
                     tabscontent._scrollContent.nativeElement.querySelector('super-tabs-container').style.height = '100%';
                     //sometimes the content jumps once the scroll is initiated yielding a bad animation
                     if(tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.position != 'absolute'){
-                        let x = content.scrollTop;
                         tabscontent._scrollContent.nativeElement.querySelector('super-tabs-toolbar').style.position = 'absolute';
                         content.scrollTop = x;
                     }

@@ -13,6 +13,21 @@ export class HidenavHeader {
     }
 
     ngAfterViewInit() {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach(() => {
+                if(this.el._elementRef.nativeElement.getAttribute('hidenav-header').length > 0) {
+                    this.name = this.el._elementRef.nativeElement.getAttribute('hidenav-header');
+                    this.start();
+                    observer.disconnect();
+                }
+            });
+        });
+        observer.observe(this.el._elementRef.nativeElement, {
+            attributes: true,
+        });
+    }
+
+    start() {
         if(typeof this.globals.data[this.name] == 'undefined' || this.globals.data[this.name] == null)
             this.globals.data[this.name] = [];
         if(this.globals.data[this.name].header != null )

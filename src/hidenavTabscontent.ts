@@ -2,6 +2,7 @@ import {Directive, Host, Self, Optional, Input, ContentChild} from '@angular/cor
 import {HidenavService} from "./hidenavService";
 import {Content} from "ionic-angular";
 import {SuperTabsComponent} from "ionic2-super-tabs";
+import $ from 'jquery';
 
 @Directive({
     selector: '[hidenav-tabscontent]'
@@ -15,6 +16,9 @@ export class HidenavTabscontent {
     }
 
     ngAfterViewInit() {
+        this.name = this.globals.requestName();
+        this.el._elementRef.nativeElement.setAttribute('hidenav-tabscontent', this.name);
+        $('[hidenav-header]', $(this.el._elementRef.nativeElement).parents().get().find(itm => $(itm).find('[hidenav-header]').length)).attr('hidenav-header', this.name);
         if(typeof this.globals.data[this.name] == 'undefined' || this.globals.data[this.name] == null)
             this.globals.data[this.name] = [];
         if(this.globals.data[this.name].tabscontent != null )

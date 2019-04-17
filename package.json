@@ -2,11 +2,14 @@
   "name": "ionic3-hidenav",
   "version": "1.0.0",
   "description": "A simple navbar auto-hide module for ionic 3",
-  "main": "./index.js",
-  "typings": "./index.d.ts",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "ngc": "ngc",
-    "build": "rm -rf aot dist && npm run ngc",
+    "build": "rm -rf dist && npm run ngc",
     "publishPackage": "npm run build && npm publish"
   },
   "repository": {
@@ -35,6 +38,7 @@
     "typescript": "2.4.2"
   },
   "dependencies": {
-    "ionic2-super-tabs": "^5.1.1"
+    "ionic2-super-tabs": "^5.1.1",
+    "jquery": "^3.4.0"
   }
 }
