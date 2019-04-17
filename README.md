@@ -138,4 +138,4 @@ then you need to link the tabspage with each underlying page you want to use the
 **Thats it, enjoy!**
 
 [npm-url]: https://npmjs.org/package/ionic3-hidenav
-[npm-image]: https://img.shields.io/badge/npm-2.0.0-green.svg
+[npm-image]: https://img.shields.io/badge/npm-2.0.1-green.svg
